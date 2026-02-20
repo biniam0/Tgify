@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SummaryResult } from '../types'
 import { ExternalLink } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 
 interface SummaryDisplayProps {
   result: SummaryResult
@@ -15,7 +16,7 @@ export function SummaryDisplay({ result }: SummaryDisplayProps) {
         </CardHeader>
         <CardContent>
           <div className="prose dark:prose-invert max-w-none">
-            <p className="whitespace-pre-wrap">{result.summary}</p>
+            <ReactMarkdown>{result.summary}</ReactMarkdown>
           </div>
         </CardContent>
       </Card>
