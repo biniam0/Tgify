@@ -28,7 +28,7 @@ import { SimpleToast } from '@/components/ui/simple-toast'
 
 const formSchema = z.object({
   apiKey: z.string().min(1, 'API Key is required'),
-  model: z.enum(['deepseek', 'grok']),
+  model: z.enum(['deepseek', 'gemini']),
   channelId: z.string().url('Must be a valid URL (e.g., https://t.me/ja_stler)'),
   customPrompt: z.string().optional(),
   dateRange: z.object({
@@ -101,7 +101,7 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
             <Label htmlFor="model">AI Model</Label>
             <Select
               onValueChange={(value) => {
-                if (value === 'grok') {
+                if (value === 'gemini') {
                   setShowToast(true)
                   return
                 }
@@ -114,11 +114,16 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="deepseek">DeepSeek</SelectItem>
-                <SelectItem value="grok" className="text-muted-foreground">
-                  Grok (xAI) <span className="ml-2 text-xs">(Coming Soon)</span>
+                <SelectItem value="gemini" className="text-muted-foreground">
+                  Gemini (Google) <span className="ml-2 text-xs">(Coming Soon)</span>
                 </SelectItem>
               </SelectContent>
             </Select>
+            <SimpleToast 
+              message="Gemini integration is coming soon!" 
+              isVisible={showToast} 
+              onClose={() => setShowToast(false)} 
+            />
             {errors.model && (
               <p className="text-sm text-destructive">{errors.model.message}</p>
             )}
@@ -205,7 +210,7 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
         </CardFooter>
       </form>
       <SimpleToast 
-        message="Grok integration is coming soon!" 
+        message="Gemini integration is coming soon!" 
         isVisible={showToast} 
         onClose={() => setShowToast(false)} 
       />

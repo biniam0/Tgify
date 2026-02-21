@@ -10,7 +10,7 @@ export interface SummaryRequest {
   startDate: Date;
   endDate: Date;
   apiKey: string;
-  model: 'deepseek' | 'grok';
+  model: 'deepseek' | 'gemini';
   customPrompt?: string;
 }
 

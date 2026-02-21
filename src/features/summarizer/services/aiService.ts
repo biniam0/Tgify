@@ -1,6 +1,7 @@
 import { TelegramPost } from '../types';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
 export async function summarizePosts(posts: TelegramPost[], apiKey: string, model: string, customPrompt?: string): Promise<string> {
   if (posts.length === 0) {
@@ -36,13 +37,9 @@ export async function summarizePosts(posts: TelegramPost[], apiKey: string, mode
         aiModel = deepseek('deepseek-chat');
         break;
       
-      case 'grok':
-        // Grok is OpenAI compatible
-        const grok = createOpenAI({ 
-          baseURL: 'https://api.x.ai/v1', 
-          apiKey 
-        });
-        aiModel = grok('grok-2-1212');
+      case 'gemini':
+        const google = createGoogleGenerativeAI({ apiKey });
+        aiModel = google('gemini-1.5-pro');
         break;
         
       default:
