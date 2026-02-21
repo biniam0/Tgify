@@ -60,7 +60,7 @@ export async function summarizePosts(posts: TelegramPost[], apiKey: string, mode
     }
 
     const { text } = await generateText({
-      model: aiModel,
+      model: aiModel as any,
       prompt: prompt,
     });
 
