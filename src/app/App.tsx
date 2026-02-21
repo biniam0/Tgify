@@ -5,6 +5,8 @@ import { fetchTelegramPosts } from '@/features/summarizer/api/telegram'
 import { summarizePosts } from '@/features/summarizer/services/aiService'
 import { SummaryResult } from '@/features/summarizer/types'
 import { ModeToggle } from '@/components/mode-toggle'
+import { Button } from '@/components/ui/button'
+import { Github, Linkedin } from 'lucide-react'
 
 function App() {
   const [summaryResult, setSummaryResult] = useState<SummaryResult | null>(null)
@@ -47,7 +49,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background p-8 font-sans antialiased relative">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => window.open('https://github.com/biniam0/Tgify', '_blank')}
+        >
+          <Github className="h-[1.2rem] w-[1.2rem]" />
+          <span className="sr-only">GitHub</span>
+        </Button>
         <ModeToggle />
       </div>
       <div className="mx-auto max-w-4xl space-y-8">
@@ -69,9 +79,18 @@ function App() {
 
           {summaryResult && <SummaryDisplay result={summaryResult} />}
         </main>
-        
-        <footer className="text-center text-sm text-muted-foreground pt-8">
-          Built with React, Shadcn UI, and Vercel AI SDK.
+
+        <footer className="text-center text-sm text-muted-foreground pt-8 flex items-center justify-center gap-1">
+          Built with 💖, let's connect
+          <a
+            href="https://www.linkedin.com/in/imjaa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center hover:text-foreground transition-colors"
+          >
+            <Linkedin className="h-4 w-4" />
+            <span className="sr-only">LinkedIn</span>
+          </a>
         </footer>
       </div>
     </div>
