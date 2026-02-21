@@ -24,10 +24,11 @@ import {
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import { SimpleToast } from '@/components/ui/simple-toast'
 
 const formSchema = z.object({
   apiKey: z.string().min(1, 'API Key is required'),
-  model: z.enum(['gpt', 'gemini', 'deepseek', 'grok']),
+  model: z.enum(['deepseek', 'grok']),
   channelId: z.string().url('Must be a valid URL (e.g., https://t.me/ja_stler)'),
   customPrompt: z.string().optional(),
   dateRange: z.object({
@@ -45,6 +46,7 @@ interface SummarizerFormProps {
 
 export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
   const [date, setDate] = useState<{ from: Date; to: Date } | undefined>()
+  const [showToast, setShowToast] = useState(false)
 
   const {
     register,
@@ -55,7 +57,7 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      model: 'gpt',
+      model: 'deepseek',
     },
   })
 
@@ -98,19 +100,23 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
           <div className="space-y-2">
             <Label htmlFor="model">AI Model</Label>
             <Select
-              onValueChange={(value) =>
-                setValue('model', value as 'gpt' | 'gemini' | 'deepseek' | 'grok')
-              }
-              defaultValue={watch('model')}
+              onValueChange={(value) => {
+                if (value === 'grok') {
+                  setShowToast(true)
+                  return
+                }
+                setValue('model', value as 'deepseek')
+              }}
+              value={watch('model')}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gpt">GPT-4 (OpenAI)</SelectItem>
-                <SelectItem value="gemini">Gemini (Google)</SelectItem>
                 <SelectItem value="deepseek">DeepSeek</SelectItem>
-                <SelectItem value="grok">Grok (xAI)</SelectItem>
+                <SelectItem value="grok" className="text-muted-foreground">
+                  Grok (xAI) <span className="ml-2 text-xs">(Coming Soon)</span>
+                </SelectItem>
               </SelectContent>
             </Select>
             {errors.model && (
@@ -198,6 +204,11 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
           </Button>
         </CardFooter>
       </form>
+      <SimpleToast 
+        message="Grok integration is coming soon!" 
+        isVisible={showToast} 
+        onClose={() => setShowToast(false)} 
+      />
     </Card>
   )
 }
