@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeProvider } from '@/components/theme-provider';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -6,7 +7,8 @@ interface AppProvidersProps {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    // Add providers here like ThemeProvider, QueryClientProvider, AuthProvider
-    <>{children}</>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      {children}
+    </ThemeProvider>
   );
 }

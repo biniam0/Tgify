@@ -4,6 +4,7 @@ import { SummaryDisplay } from '@/features/summarizer/components/SummaryDisplay'
 import { fetchTelegramPosts } from '@/features/summarizer/api/telegram'
 import { summarizePosts } from '@/features/summarizer/services/aiService'
 import { SummaryResult } from '@/features/summarizer/types'
+import { ModeToggle } from '@/components/mode-toggle'
 
 function App() {
   const [summaryResult, setSummaryResult] = useState<SummaryResult | null>(null)
@@ -45,7 +46,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8 font-sans antialiased">
+    <div className="min-h-screen bg-background p-8 font-sans antialiased relative">
+      <div className="absolute top-4 right-4">
+        <ModeToggle />
+      </div>
       <div className="mx-auto max-w-4xl space-y-8">
         <header className="text-center space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">Tgify</h1>
