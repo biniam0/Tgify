@@ -3,7 +3,7 @@ import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
-export async function summarizePosts(posts: TelegramPost[], apiKey: string, model: string): Promise<string> {
+export async function summarizePosts(posts: TelegramPost[], apiKey: string, model: string, customPrompt?: string): Promise<string> {
   if (posts.length === 0) {
     return "No posts found in the selected date range.";
   }
@@ -18,6 +18,7 @@ export async function summarizePosts(posts: TelegramPost[], apiKey: string, mode
     Focus on the main topics, key announcements, and interesting discussions.
     Group related topics together if possible.
     Provide the summary in a clear, bulleted list format.
+    ${customPrompt ? `\nAdditional Instructions:\n${customPrompt}\n` : ''}
     
     Posts:
     ${postsContent}

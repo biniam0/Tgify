@@ -6,7 +6,7 @@ import { summarizePosts } from '@/features/summarizer/services/aiService'
 import { SummaryResult } from '@/features/summarizer/types'
 import { ModeToggle } from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
-import { Github, Linkedin } from 'lucide-react'
+import { Github, Linkedin, ChevronsRight, Twitter, Send } from 'lucide-react'
 
 function App() {
   const [summaryResult, setSummaryResult] = useState<SummaryResult | null>(null)
@@ -33,7 +33,7 @@ function App() {
       }
 
       // 2. Summarize posts
-      const summary = await summarizePosts(posts, data.apiKey, data.model)
+      const summary = await summarizePosts(posts, data.apiKey, data.model, data.customPrompt)
 
       setSummaryResult({
         summary,
@@ -82,15 +82,36 @@ function App() {
 
         <footer className="text-center text-sm text-muted-foreground pt-8 flex items-center justify-center gap-1">
           Built with 💖, let's connect
-          <a
-            href="https://www.linkedin.com/in/imjaa/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center hover:text-foreground transition-colors"
-          >
-            <Linkedin className="h-4 w-4" />
-            <span className="sr-only">LinkedIn</span>
-          </a>
+          <ChevronsRight className="h-4 w-4 animate-pulse " />
+          <span className="flex items-center gap-2">
+            <a
+              href="https://www.linkedin.com/in/imjaa/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center hover:text-foreground transition-colors"
+            >
+              <Linkedin className="h-6 w-6 animate-heartbeat text-[#0A66C2]" />
+              <span className="sr-only">LinkedIn</span>
+            </a>
+            <a
+              href="https://x.com/imjaa_k"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center hover:text-foreground transition-colors"
+            >
+              <Twitter className="h-6 w-6 animate-heartbeat text-foreground" />
+              <span className="sr-only">X (Twitter)</span>
+            </a>
+            <a
+              href="https://t.me/ja_stler"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center hover:text-foreground transition-colors"
+            >
+              <Send className="h-6 w-6 animate-heartbeat text-[#229ED9]" />
+              <span className="sr-only">Telegram</span>
+            </a>
+          </span>
         </footer>
       </div>
     </div>

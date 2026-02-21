@@ -11,6 +11,7 @@ export interface SummaryRequest {
   endDate: Date;
   apiKey: string;
   model: 'gpt' | 'gemini' | 'deepseek' | 'grok';
+  customPrompt?: string;
 }
 
 export interface SummaryResult {

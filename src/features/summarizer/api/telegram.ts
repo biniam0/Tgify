@@ -24,18 +24,37 @@ export const fetchTelegramPosts = async (
 
   // Use a CORS proxy to fetch the public channel preview page
   // We use the /s/ version of the URL which is the "preview" mode that loads more content statically
-  // Using corsproxy.io as a more reliable alternative to allorigins.win
+  // Try multiple proxies for reliability
   const targetUrl = `https://t.me/s/${username}`;
-  const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+  
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+    `https://thingproxy.freeboard.io/fetch/${targetUrl}`
+  ];
+
+  let html = '';
+  let lastError;
+
+  for (const proxyUrl of proxies) {
+    try {
+      const response = await axios.get(proxyUrl);
+      if (response.data) {
+        html = response.data;
+        break; // Success, exit loop
+      }
+    } catch (error) {
+      console.warn(`Proxy failed: ${proxyUrl}`, error);
+      lastError = error;
+      // Continue to next proxy
+    }
+  }
+
+  if (!html) {
+    throw new Error(lastError?.message || "Failed to fetch channel content from all proxies.");
+  }
 
   try {
-    const response = await axios.get(proxyUrl);
-    const html = response.data; // corsproxy.io returns the raw HTML directly
-    
-    if (!html) {
-        throw new Error("Failed to load channel content.");
-    }
-
     // Parse HTML using DOMParser
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -80,7 +99,7 @@ export const fetchTelegramPosts = async (
     return posts;
 
   } catch (error: any) {
-    console.error("Error fetching Telegram posts:", error);
-    throw new Error(error.message || "Failed to fetch posts. The channel might be private or the proxy is busy.");
+    console.error("Error parsing Telegram posts:", error);
+    throw new Error("Failed to parse channel content. The channel layout might have changed.");
   }
 };

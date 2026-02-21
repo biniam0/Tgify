@@ -23,11 +23,13 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
 
 const formSchema = z.object({
   apiKey: z.string().min(1, 'API Key is required'),
   model: z.enum(['gpt', 'gemini', 'deepseek', 'grok']),
   channelId: z.string().url('Must be a valid URL (e.g., https://t.me/ja_stler)'),
+  customPrompt: z.string().optional(),
   dateRange: z.object({
     from: z.date({ required_error: 'Start date is required' }),
     to: z.date({ required_error: 'End date is required' }),
@@ -63,10 +65,10 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
       setDate({ from: range.from, to: range.to })
       setValue('dateRange', { from: range.from, to: range.to })
     } else {
-        // Handle partial selection if needed, or just wait for both
-        if (range?.from) {
-             setDate({ from: range.from, to: range.from }) // Temporary set to avoid type errors if needed
-        }
+      // Handle partial selection if needed, or just wait for both
+      if (range?.from) {
+        setDate({ from: range.from, to: range.from }) // Temporary set to avoid type errors if needed
+      }
     }
   }
 
@@ -172,6 +174,15 @@ export function SummarizerForm({ onSubmit, isLoading }: SummarizerFormProps) {
                 {errors.dateRange.root?.message || "Date range is required"}
               </p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="customPrompt">Custom Instructions (Optional)</Label>
+            <Textarea
+              id="customPrompt"
+              placeholder="e.g. Make the summary no more than 5 lines"
+              {...register('customPrompt')}
+            />
           </div>
         </CardContent>
         <CardFooter>
